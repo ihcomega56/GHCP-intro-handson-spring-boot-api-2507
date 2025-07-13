@@ -5,7 +5,29 @@
 - JDK 21以上
 - 【任意】 Gradle 8.4以上 ※Gradle Wrapperでもかまいません。サンプルコマンドでも使用しています。
 
-### 実行方法
+### 実行方法（Windows PowerShell）
+
+1. ハンズオンディレクトリに移動します。
+    ```powershell
+    cd \path\to\GHCP-intro-handson2504\handson\
+    ```
+
+2. 必要な依存関係をインストールします。
+    ```powershell
+    .\gradlew.bat build
+    ```
+
+3. アプリケーションを起動します。
+    ```powershell
+    .\gradlew.bat bootRun
+    ```
+
+4. アプリケーションが起動したら、以下のURLでAPIを利用できます。
+    ```
+    http://localhost:8080/api/posts
+    ```
+
+### 実行方法（Mac, WSL2 / Linux）
 
 1. ハンズオンディレクトリに移動します。
     ```bash
@@ -23,6 +45,9 @@
     ```
 
 4. アプリケーションが起動したら、以下のURLでAPIを利用できます。
+    ```
+    http://localhost:8080/api/posts
+    ```
 
 ---
 
@@ -58,5 +83,29 @@ curl -X GET http://localhost:8080/api/posts/published
 ### 6. 下書き投稿の一覧取得
 ```bash
 curl -X GET http://localhost:8080/api/posts/drafts
+```
+
+## 下書きを10件投稿、そのうち5件を公開するスクリプト
+
+プロジェクトには、10件の下書き投稿を作成して、そのうち5件を公開状態にするシェルスクリプト `create_posts.sh` が用意されています。
+
+### スクリプトの実行方法（Windows PowerShell）
+
+```powershell
+# PowerShellでスクリプトを実行
+.\create_posts.ps1
+```
+
+Windows環境では、シェルスクリプト（.sh）の代わりにPowerShellスクリプト（.ps1）を使用します。
+プロジェクトには `create_posts.ps1` が用意されています。
+
+### スクリプトの実行方法（Mac, WSL2 / Linux）
+
+```bash
+# スクリプトに実行権限を付与（初回のみ）
+chmod +x create_posts.sh
+
+# スクリプトを実行
+./create_posts.sh
 ```
 
