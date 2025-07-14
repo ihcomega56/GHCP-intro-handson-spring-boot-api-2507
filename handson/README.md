@@ -22,16 +22,15 @@
     .\gradlew.bat bootRun
     ```
 
-4. アプリケーションが起動したら、以下のURLでAPIを利用できます。
-    ```
-    http://localhost:8080/api/posts
-    ```
+4. アプリケーションが起動したら、以下のセクションのAPI実行サンプルを参照して動作確認ができます：
+    - 「API実行のサンプルcurlコマンド」セクション
+    - 「下書きを10件投稿、そのうち5件を公開するスクリプト」セクション
 
 ### 実行方法（Mac, WSL2 / Linux）
 
 1. ハンズオンディレクトリに移動します。
     ```bash
-    cd /workspaces/GHCP-intro-handson2504/handson/
+    cd /path/to/GHCP-intro-handson2504/handson/
     ```
 
 2. 必要な依存関係をインストールします。
@@ -44,10 +43,9 @@
     ./gradlew bootRun
     ```
 
-4. アプリケーションが起動したら、以下のURLでAPIを利用できます。
-    ```
-    http://localhost:8080/api/posts
-    ```
+4. アプリケーションが起動したら、以下のセクションのAPI実行サンプルを参照して動作確認ができます：
+    - 「API実行のサンプルcurlコマンド」セクション
+    - 「下書きを10件投稿、そのうち5件を公開するスクリプト」セクション
 
 ---
 
@@ -98,6 +96,30 @@ curl -X GET http://localhost:8080/api/posts/drafts
 
 Windows環境では、シェルスクリプト（.sh）の代わりにPowerShellスクリプト（.ps1）を使用します。
 プロジェクトには `create_posts.ps1` が用意されています。
+
+#### Windows PowerShellでのスクリプト実行エラー（UnauthorizedAccess）について
+
+PowerShellはデフォルトでスクリプトの実行が制限されています。`UnauthorizedAccess`エラーが発生した場合は、以下のいずれかの方法で対処してください：
+
+1. **現在のセッションのみ実行ポリシーを変更する方法** (推奨):
+   ```powershell
+   # 現在のPowerShellセッションでのみ実行ポリシーを変更（最もセキュア）
+   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+   
+   # その後、スクリプトを実行
+   .\create_posts.ps1
+   ```
+
+2. **スクリプトを右クリックして「PowerShellで実行」を選ぶ方法**:
+   - エクスプローラーでスクリプトファイル（.ps1）を右クリック
+   - 「PowerShellで実行」を選択
+
+3. **スクリプトの内容を直接PowerShellウィンドウにコピー&ペーストする方法**
+
+> **セキュリティに関する注意**:
+> - 上記の方法1は「Process」スコープのみの変更で、現在のPowerShellセッションが閉じられると自動的に元の設定に戻ります。
+> - システム全体（`-Scope LocalMachine`）や現在のユーザー（`-Scope CurrentUser`）の実行ポリシーを変更することも可能ですが、セキュリティリスクが増すため、必要な場合のみ慎重に行ってください。
+> - 信頼できるスクリプトのみを実行することをお勧めします。
 
 ### スクリプトの実行方法（Mac, WSL2 / Linux）
 
