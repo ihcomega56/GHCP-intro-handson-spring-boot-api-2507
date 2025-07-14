@@ -154,7 +154,7 @@ PowerShellはデフォルトでスクリプトの実行が制限されていま�
 > - システム全体（`-Scope LocalMachine`）や現在のユーザー（`-Scope CurrentUser`）の実行ポリシーを変更することも可能ですが、セキュリティリスクが増すため、必要な場合のみ慎重に行ってください。
 > - 信頼できるスクリプトのみを実行することをお勧めします。
 
-### スクリプトの実行方法（Mac, WSL2 / Linux）
+### スクリプトの実行方法（Mac, Linux）
 
 ```bash
 # スクリプトに実行権限を付与（初回のみ）
@@ -164,3 +164,12 @@ chmod +x create_posts.sh
 ./create_posts.sh
 ```
 
+### スクリプトの実行方法（WSL2）
+
+```bash
+# スクリプトに実行権限を付与（初回のみ）
+chmod +x create_posts.sh
+
+# スクリプトを実行
+./create_posts_wsl.sh
+```
