@@ -49,7 +49,40 @@
 
 ---
 
-## API実行のサンプルcurlコマンド
+## API実行のサンプルcurlコマンド（Windows Powershell）
+
+### 1. 下書き投稿の作成
+```powershell
+$jsonBody = @{ content = "This is a test post." } | ConvertTo-Json
+Invoke-RestMethod -Uri "http://localhost:8080/api/posts/drafts" -Method Post -ContentType "application/json" -Body $jsonBody
+```
+
+### 2. 下書き投稿の公開
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8080/api/posts/drafts/{id}/publish" -Method Put
+```
+
+### 3. 投稿の取得
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8080/api/posts/{id}" -Method Get
+```
+
+### 4. 投稿の削除
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8080/api/posts/{id}" -Method Delete
+```
+
+### 5. 公開済み投稿の一覧取得
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8080/api/posts/published" -Method Get
+```
+
+### 6. 下書き投稿の一覧取得
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8080/api/posts/drafts" -Method Get
+```
+
+## API実行のサンプルcurlコマンド（Mac, WSL2 / Linux）
 
 ### 1. 下書き投稿の作成
 ```bash

@@ -1,49 +1,94 @@
-# PowerShellスクリプト: 下書きを10件投稿し、そのうち5件を公開する
+# PowerShell script: Create 10 draft posts and publish 5 of them
 
-# 結果を保存する配列
+# Array to store post IDs
 $post_ids = @()
 
-# 10件の下書き投稿を作成
+Write-Host "Starting script..."
+
+# Check server status
+try {
+    Write-Host "Checking server status..."
+    $testResponse = Invoke-RestMethod -Uri "http://localhost:8080/api/posts/published" -Method Get -ErrorAction Stop
+    Write-Host "Server is running normally."
+} catch {
+    Write-Host "Error: Cannot connect to server. Please ensure Spring Boot application is running."
+    Write-Host "Error details: $($_.Exception.Message)"
+    exit 1
+}
+
+# Create 10 draft posts
 for ($i = 1; $i -le 10; $i++) {
-    Write-Host "下書き投稿 $i を作成中..."
-    $jsonBody = @{
-        content = "投稿${i}です。これは下書き状態の投稿内容です。"
-    } | ConvertTo-Json
-    
-    $response = Invoke-RestMethod -Uri "http://localhost:8080/api/posts/drafts" -Method Post -ContentType "application/json" -Body $jsonBody
-    $post_ids += $response.id
-    Write-Host "下書き投稿 $i が作成されました。ID: $($response.id)"
-    
-    # 日時に差をつけるために待機
-    Start-Sleep -Seconds 1
+    try {
+        Write-Host "Creating draft post $i..."
+        $jsonBody = @{
+            content = "Post $i content. This is a draft post."
+        } | ConvertTo-Json
+        
+        $response = Invoke-RestMethod -Uri "http://localhost:8080/api/posts/drafts" -Method Post -ContentType "application/json" -Body $jsonBody -ErrorAction Stop
+        $post_ids += $response.id
+        Write-Host "Draft post $i created successfully. ID: $($response.id)"
+        
+        # Wait to create time difference
+        Start-Sleep -Seconds 1
+    } catch {
+        Write-Host "Error: Failed to create draft post $i"
+        Write-Host "Error details: $($_.Exception.Message)"
+        exit 1
+    }
 }
 
-Write-Host "10件の下書き投稿が作成されました。"
+Write-Host "10 draft posts have been created."
 Write-Host "-------------------------------------"
 
-# 最初の5件を公開
+# Publish first 5 posts
 for ($i = 0; $i -lt 5; $i++) {
-    $id = $post_ids[$i]
-    Write-Host "投稿 ID: $id を公開中..."
-    $response = Invoke-RestMethod -Uri "http://localhost:8080/api/posts/drafts/$id/publish" -Method Put
-    Write-Host "投稿 ID: $id が公開されました。"
-    
-    # 日時に差をつけるために待機
-    Start-Sleep -Seconds 1
+    try {
+        $id = $post_ids[$i]
+        Write-Host "Publishing post ID: $id..."
+        $response = Invoke-RestMethod -Uri "http://localhost:8080/api/posts/drafts/$id/publish" -Method Put -ErrorAction Stop
+        Write-Host "Post ID: $id has been published."
+        
+        # Wait to create time difference
+        Start-Sleep -Seconds 1
+    } catch {
+        Write-Host "Error: Failed to publish post ID: $($post_ids[$i])"
+        Write-Host "Error details: $($_.Exception.Message)"
+    }
 }
 
 Write-Host "-------------------------------------"
-Write-Host "5件の投稿が公開されました。"
-Write-Host "残りの5件は下書き状態のままです。"
+Write-Host "5 posts have been published."
+Write-Host "Remaining 5 posts are still in draft status."
 
-# 公開済み投稿の確認
-Write-Host "-------------------------------------"
-Write-Host "公開済み投稿一覧:"
-$publishedPosts = Invoke-RestMethod -Uri "http://localhost:8080/api/posts/published" -Method Get
-$publishedPosts | ConvertTo-Json -Depth 3
+# Check published posts
+try {
+    Write-Host "-------------------------------------"
+    Write-Host "Published posts list:"
+    $publishedPosts = Invoke-RestMethod -Uri "http://localhost:8080/api/posts/published" -Method Get -ErrorAction Stop
+    if ($publishedPosts.Count -eq 0) {
+        Write-Host "No published posts found."
+    } else {
+        $publishedPosts | ConvertTo-Json -Depth 3
+    }
+} catch {
+    Write-Host "Error: Failed to retrieve published posts."
+    Write-Host "Error details: $($_.Exception.Message)"
+}
 
-# 下書き投稿の確認
+# Check draft posts
+try {
+    Write-Host "-------------------------------------"
+    Write-Host "Draft posts list:"
+    $draftPosts = Invoke-RestMethod -Uri "http://localhost:8080/api/posts/drafts" -Method Get -ErrorAction Stop
+    if ($draftPosts.Count -eq 0) {
+        Write-Host "No draft posts found."
+    } else {
+        $draftPosts | ConvertTo-Json -Depth 3
+    }
+} catch {
+    Write-Host "Error: Failed to retrieve draft posts."
+    Write-Host "Error details: $($_.Exception.Message)"
+}
+
 Write-Host "-------------------------------------"
-Write-Host "下書き投稿一覧:"
-$draftPosts = Invoke-RestMethod -Uri "http://localhost:8080/api/posts/drafts" -Method Get
-$draftPosts | ConvertTo-Json -Depth 3
+Write-Host "Script completed successfully."
