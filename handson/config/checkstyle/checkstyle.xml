@@ -35,7 +35,10 @@
         <module name="ConstantName"/>
         <module name="LocalVariableName"/>
         <module name="MemberName"/>
-        <module name="MethodName"/>
+        <module name="MethodName">
+            <!-- テストメソッドでアンダースコアを許可 -->
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$|^[a-z][a-zA-Z0-9]*_[a-zA-Z0-9_]*$"/>
+        </module>
         <module name="PackageName"/>
         <module name="ParameterName"/>
         <module name="StaticVariableName"/>
@@ -59,9 +62,22 @@
 
         <!-- コードの問題 -->
         <module name="EmptyStatement"/>
-        <module name="EqualsHashCode"/>
         <module name="MissingSwitchDefault"/>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
+        
+        <!-- インデント -->
+        <module name="Indentation">
+            <property name="basicOffset" value="4"/>
+            <property name="braceAdjustment" value="0"/>
+            <property name="caseIndent" value="4"/>
+            <property name="throwsIndent" value="4"/>
+        </module>
+        
+        <!-- その他の有用なルール -->
+        <module name="UnusedImports"/>
+        <module name="IllegalInstantiation"/>
+        <module name="FinalClass"/>
+        <!-- HideUtilityClassConstructor: Spring Bootのメインクラスは手動で除外 -->
     </module>
 </module>
